@@ -1,0 +1,3 @@
+"use client"
+// ...existing code...
+// (El código completo de use-toast.ts se debe copiar aquí para mantener la funcionalidad)
