@@ -1,5 +1,11 @@
 // Reescribir el archivo para corregir errores de sintaxis y tipos
-import { SongCreationFormValues } from "../../config/schemas";
+// Define SongCreationFormValues locally if the external module is missing
+export type SongCreationFormValues = {
+  title: string;
+  artist: string;
+  genre?: string;
+  [key: string]: any;
+};
 
 /**
  * Acción para crear una canción basada en los datos proporcionados por el usuario
