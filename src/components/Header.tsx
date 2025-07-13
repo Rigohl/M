@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -42,51 +41,43 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-4">
-           <Link href="/formularios" passHref>
-            <Button className="font-bold bg-accent-gold text-accent-foreground hover:bg-accent-gold/90 transition-transform duration-300 hover:scale-105 shadow-md hidden sm:flex">
-                Crear Canción
-            </Button>
-          </Link>
-          <div className="md:hidden">
-            <Sheet>
-                <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                        <Menu className="h-6 w-6" />
-                        <span className="sr-only">Abrir menú</span>
-                    </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="w-[240px]">
-                    <div className="flex flex-col gap-4 py-8">
-                         <Link href="/" className="flex items-center gap-2 mb-4">
-                            <Music className="h-6 w-6 text-primary" />
-                            <span className="font-headline text-xl font-bold">DualMuse</span>
-                        </Link>
-                        {navLinks.map((link) => (
-                            <SheetClose asChild key={link.href}>
-                                <Link
-                                    href={link.href}
-                                    className={cn(
-                                        "text-lg",
-                                        pathname === link.href ? "text-foreground font-bold" : "text-foreground/60"
-                                    )}
-                                >
-                                    {link.label}
-                                </Link>
-                            </SheetClose>
-                        ))}
-                         <Separator className="my-2" />
-                         <SheetClose asChild>
-                           <Link href="/formularios" passHref>
-                            <Button className="font-bold bg-accent-gold text-accent-foreground hover:bg-accent-gold/90 w-full">
-                                Crear Canción
-                            </Button>
-                          </Link>
-                        </SheetClose>
-                    </div>
-                </SheetContent>
-            </Sheet>
-          </div>
+        {/* Menú móvil */}
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+                <span className="sr-only">Abrir menú</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0">
+              <div className="flex flex-col h-full">
+                <div className="flex items-center gap-2 px-4 py-4 border-b">
+                  <Music className="h-6 w-6 text-primary" />
+                  <span className="font-headline text-xl font-bold">DualMuse</span>
+                </div>
+                <nav className="flex-1 flex flex-col gap-2 p-4">
+                  {navLinks.map((link) => (
+                    <SheetClose asChild key={link.href}>
+                      <Link
+                        href={link.href}
+                        className={cn(
+                          "transition-colors py-2 px-2 rounded hover:bg-secondary/50 hover:text-foreground/80",
+                          pathname === link.href ? "text-foreground font-semibold bg-secondary/80" : "text-foreground/60"
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                </nav>
+                <Separator />
+                <div className="p-4 text-xs text-muted-foreground text-center">
+                  © {new Date().getFullYear()} DualMuse
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>

@@ -1,4 +1,3 @@
-
 export type Plan = {
   value: 'creator' | 'artist' | 'master';
   label: string;

@@ -1,12 +1,28 @@
-# Firebase Studio
+# DualMuse - Tu historia hecha corrido
 
-This is a NextJS starter in Firebase Studio.
+Este proyecto es una aplicación web construida con Next.js que permite a los usuarios crear canciones personalizadas (corridos) utilizando IA.
 
-To get started, take a look at src/app/page.tsx.
+## Primeros pasos
 
-## Project Structure Map
+Para ejecutar este proyecto en tu entorno local:
 
-This is a breakdown of your web application's structure. Understanding it will help you know where to find each piece and how they connect.
+### 1. Instalar dependencias
+
+Primero, instala todas las dependencias necesarias:
+
+```bash
+npm install
+```
+
+### 2. Ejecutar el servidor de desarrollo
+
+Una vez instaladas las dependencias, inicia el servidor de desarrollo:
+
+```bash
+npm run dev
+```
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado.
 
 ### **Root Directory (`/`)**
 

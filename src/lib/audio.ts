@@ -1,4 +1,3 @@
-
 import wav from 'wav';
 
 /**

@@ -1,28 +1,25 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { Toaster } from "@/components/ui/toaster"
-import { cn } from '@/lib/utils';
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+// Los imports de React ya no son necesarios en la versión actual de Next.js
+// para componentes server components
+// Comentado temporalmente mientras trabajamos solo en la landing
+// import { Header } from "@/components/Header";
+// import { Footer } from "@/components/Footer";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: 'DualMuse - Canciones Personalizadas',
-  description: 'Creamos canciones emocionales y corridos bélicos únicos para ti, con el poder de la inteligencia artificial.',
-  openGraph: {
-    title: 'DualMuse - Canciones Personalizadas',
-    description: 'Creamos canciones emocionales y corridos bélicos únicos para ti, con el poder de la inteligencia artificial.',
-    url: 'https://dualmuse-demo.web.app', // Replace with actual domain
-    siteName: 'DualMuse',
-    images: [
-      {
-        url: 'https://placehold.co/1200x630.png', // Replace with a real OG image
-        width: 1200,
-        height: 630,
-      },
-    ],
-    locale: 'es_MX',
-    type: 'website',
-  },
+  title: "DualMuse | Tu historia hecha corrido",
+  description: "Convierte tus emociones y anécdotas en una canción inolvidable, creada por IA y músicos expertos.",
 };
 
 export default function RootLayout({
@@ -31,17 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="dark">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
-      </head>
-      <body className={cn("font-body antialiased flex flex-col min-h-screen")}>
-        <Header />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <Toaster />
+    <html lang="es">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <div className="flex min-h-screen flex-col">
+          {/* Comentario: Header está comentado temporalmente mientras se trabaja solo en la landing
+          <Header /> */}
+          <main className="flex-1">{children}</main>
+          {/* Comentario: Footer está comentado temporalmente mientras se trabaja solo en la landing
+          <Footer /> */}
+        </div>
       </body>
     </html>
   );
