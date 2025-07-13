@@ -1,0 +1,21 @@
+# APIs y frameworks web
+flask
+fastapi
+uvicorn
+
+# Cliente de Supabase
+supabase
+
+# Utilitarios y herramientas
+requests
+python-dotenv
+pydantic
+openai
+
+# Testing
+pytest
+httpx
+
+# Otras dependencias
+numpy
+pandas

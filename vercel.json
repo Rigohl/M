@@ -1,0 +1,23 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "python3 backend/pre_build.py && npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "pip install -r backend/requirements.txt && npm ci",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/backend/api.py"
+    }
+  ],
+  "functions": {
+    "backend/*.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/maintenance",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
