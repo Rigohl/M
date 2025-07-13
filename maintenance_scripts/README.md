@@ -9,6 +9,7 @@ Este directorio contiene scripts para mantener y corregir errores comunes en el 
 Este es el script principal que ejecuta todas las correcciones necesarias, incluyendo la instalación de dependencias y la limpieza de archivos Markdown.
 
 **Uso:**
+
 ```bash
 python maintenance_scripts/fix_project_errors.py
 ```
@@ -18,6 +19,7 @@ python maintenance_scripts/fix_project_errors.py
 Si solo necesitas asegurarte de que todas las dependencias de Python estén instaladas, puedes usar este script.
 
 **Uso:**
+
 ```bash
 python maintenance_scripts/install_dependencies.py
 ```
@@ -27,10 +29,13 @@ python maintenance_scripts/install_dependencies.py
 Si solo quieres corregir el formato de los archivos `.md` del proyecto.
 
 **Uso:**
+
 ```bash
 python maintenance_scripts/fix_markdown.py <ruta_al_archivo.md>
 ```
+
 Por ejemplo:
+
 ```bash
 python maintenance_scripts/fix_markdown.py README.md
 ```
