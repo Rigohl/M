@@ -69,6 +69,9 @@ const nextConfig: NextConfig = {
   functions: {
     "api/index.php": {
       runtime: "now-php@1.0.0"
+    },
+    "api/**/*.py": {
+      runtime: "python@3.9"
     }
   }
 };
