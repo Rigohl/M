@@ -7,10 +7,13 @@ import asyncio
 from backend.ai_integration import AIIntegration
 from backend.routes.ai_routes import router as ai_router
 
-# Configuración de Supabase
-SUPABASE_URL = "YOUR_SUPABASE_URL"
-SUPABASE_KEY = "YOUR_SUPABASE_KEY"
+
+# Configuración centralizada de Supabase y otras credenciales
+from backend.config import SUPABASE_URL, SUPABASE_KEY
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+# (Preparado para integración Suno)
+SUNO_API_KEY = os.getenv("SUNO_API_KEY", "YOUR_SUNO_API_KEY")
 
 # Configuración de Datadog
 options = {
