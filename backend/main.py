@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, UploadFile, Request
+from pydantic import Field
 from typing import Callable, Awaitable, Any
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -53,9 +54,12 @@ ai_client = AIIntegration(api_key="YOUR_API_KEY")
 
 
 class SongCreationFormValues(BaseModel):
-    title: str
-    description: str
-    genre: str
+    """
+    Datos requeridos para crear una canción con IA.
+    """
+    title: str = Field(..., description="Título de la canción")
+    description: str = Field(..., description="Descripción o tema de la canción")
+    genre: str = Field(..., description="Género musical")
 
     @classmethod
     def validate_data(cls, data: dict[str, Any]) -> "SongCreationFormValues":
@@ -63,8 +67,11 @@ class SongCreationFormValues(BaseModel):
 
 
 class UserCredentials(BaseModel):
-    email: str
-    password: str
+    """
+    Credenciales de usuario para registro y login.
+    """
+    email: str = Field(..., description="Correo electrónico")
+    password: str = Field(..., description="Contraseña")
 
     @classmethod
     def validate_data(cls, data: dict[str, Any]) -> "UserCredentials":
@@ -75,9 +82,12 @@ class UserCredentials(BaseModel):
 
 
 class SongRequest(BaseModel):
-    title: str
-    artist: str
-    genre: str
+    """
+    Modelo de ejemplo para validación de canciones.
+    """
+    title: str = Field(...)
+    artist: str = Field(...)
+    genre: str = Field(...)
 
 
 @app.middleware("http")
@@ -176,12 +186,15 @@ from pydantic import Field
 
 
 class SongData(BaseModel):
-    id: str = Field(..., min_length=1)
-    title: str
-    artist: str
-    genre: str
-    lyrics: str = ""
-    audio_url: str = ""
+    """
+    Datos completos de una canción almacenada.
+    """
+    id: str = Field(..., min_length=1, description="ID único de la canción")
+    title: str = Field(..., description="Título de la canción")
+    artist: str = Field(..., description="Artista")
+    genre: str = Field(..., description="Género musical")
+    lyrics: str = Field("", description="Letra de la canción")
+    audio_url: str = Field("", description="URL del audio generado")
 
 
 @app.post("/save-song-data", response_model=dict)
