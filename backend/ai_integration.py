@@ -4,6 +4,7 @@ import openai
 import os
 import requests
 
+
 class AIIntegration:
     def __init__(self, api_key: str):
         openai.api_key = api_key
@@ -23,18 +24,15 @@ class AIIntegration:
         """
         headers = {
             "Authorization": f"Bearer {self.suno_api_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         }
-        payload = {
-            "prompt": prompt,
-            "style": style
-        }
+        payload = {"prompt": prompt, "style": style}
         try:
             response = requests.post(
                 f"{self.suno_base_url}/generate-song",
                 headers=headers,
                 json=payload,
-                timeout=timeout
+                timeout=timeout,
             )
             response.raise_for_status()
             return {"success": True, "data": response.json()}
@@ -48,10 +46,14 @@ class AIIntegration:
             response = openai.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
             )
             content = None
-            if response.choices and response.choices[0].message and response.choices[0].message.content:
+            if (
+                response.choices
+                and response.choices[0].message
+                and response.choices[0].message.content
+            ):
                 content = response.choices[0].message.content
             if content:
                 return {"success": True, "data": content.strip()}
@@ -62,17 +64,20 @@ class AIIntegration:
 
     def generate_image(self, description: str):
         try:
-            response = openai.images.generate(
-                prompt=description,
-                n=1,
-                size="1024x1024"
-            )
+            response = openai.images.generate(prompt=description, n=1, size="1024x1024")
             url = None
-            if hasattr(response, 'data') and response.data and hasattr(response.data[0], 'url'):
+            if (
+                hasattr(response, "data")
+                and response.data
+                and hasattr(response.data[0], "url")
+            ):
                 url = response.data[0].url
             if url:
                 return {"success": True, "data": url}
             else:
-                return {"success": False, "error": "No se pudo obtener la URL de la imagen generada"}
+                return {
+                    "success": False,
+                    "error": "No se pudo obtener la URL de la imagen generada",
+                }
         except Exception as e:
             return {"success": False, "error": str(e)}

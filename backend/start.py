@@ -12,24 +12,27 @@ import logging
 # Configurar logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler()
-    ]
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler()],
 )
 
 logger = logging.getLogger("DependencyManager")
+
 
 def install_dependencies():
     """Instalar dependencias de Python"""
     try:
         requirements_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
-        subprocess.run([sys.executable, "-m", "pip", "install", "-r", requirements_path], check=True)
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "-r", requirements_path],
+            check=True,
+        )
         logger.info("✅ Dependencias instaladas correctamente")
         return True
     except subprocess.CalledProcessError as e:
         logger.error(f"❌ Error al instalar dependencias: {e}")
         return False
+
 
 def run_pre_build():
     """Ejecutar verificaciones pre-build"""
@@ -41,6 +44,7 @@ def run_pre_build():
     except subprocess.CalledProcessError as e:
         logger.error(f"❌ Error en pre-build: {e}")
         return False
+
 
 def run_monitor(auto_fix=False):
     """Ejecutar monitor de dependencias"""
@@ -55,6 +59,7 @@ def run_monitor(auto_fix=False):
     except subprocess.CalledProcessError as e:
         logger.error(f"❌ Error al ejecutar monitor: {e}")
         return False
+
 
 def run_api_server(port=5000):
     """Iniciar servidor API"""
@@ -73,30 +78,42 @@ def run_api_server(port=5000):
         logger.info("API detenida por el usuario")
         return True
 
+
 def main():
     """Función principal del gestor de dependencias"""
-    parser = argparse.ArgumentParser(description="Gestor de dependencias para proyectos Node.js")
-    parser.add_argument("action", choices=["pre-build", "monitor", "api", "all"], 
-                       help="Acción a realizar")
-    parser.add_argument("--auto-fix", action="store_true", 
-                       help="Aplicar correcciones automáticamente")
-    parser.add_argument("--port", type=int, default=5000, 
-                       help="Puerto para servidor API")
-    
+    parser = argparse.ArgumentParser(
+        description="Gestor de dependencias para proyectos Node.js"
+    )
+    parser.add_argument(
+        "action",
+        choices=["pre-build", "monitor", "api", "all"],
+        help="Acción a realizar",
+    )
+    parser.add_argument(
+        "--auto-fix", action="store_true", help="Aplicar correcciones automáticamente"
+    )
+    parser.add_argument(
+        "--port", type=int, default=5000, help="Puerto para servidor API"
+    )
+
     args = parser.parse_args()
-    
+
     # Verificar si estamos en el directorio correcto
     if not os.path.exists("dependency_checker.py"):
-        logger.warning("⚠️ No se encontró dependency_checker.py en el directorio actual.")
+        logger.warning(
+            "⚠️ No se encontró dependency_checker.py en el directorio actual."
+        )
         logger.warning("Por favor, ejecute este script desde el directorio 'backend'.")
-        if not os.path.exists(os.path.join(os.path.dirname(__file__), "dependency_checker.py")):
+        if not os.path.exists(
+            os.path.join(os.path.dirname(__file__), "dependency_checker.py")
+        ):
             logger.error("❌ No se encontraron los archivos necesarios.")
             return False
-    
+
     # Instalar dependencias primero
     if not install_dependencies():
         return False
-    
+
     if args.action == "pre-build":
         return run_pre_build()
     elif args.action == "monitor":
@@ -109,6 +126,7 @@ def main():
         if not run_monitor(args.auto_fix):
             return False
         return run_api_server(args.port)
+
 
 if __name__ == "__main__":
     success = main()

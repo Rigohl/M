@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Script para verificar imports rotos y archivos faltantes en el backend Python.
-"""
+#!/usr/bin/env python3
+"""Script para verificar imports rotos y archivos faltantes en el backend Python."""
 import os
 import ast
 import sys
@@ -45,54 +46,6 @@ if missing_imports:
     sys.exit(1)
 else:
     print("Sin imports rotos detectados. Todo OK.")
-        for py_file in python_files:
-            with open(py_file, 'r', encoding='utf-8') as f:
-                content = f.read()
-                
-            # Análisis básico para encontrar imports
-            lines = content.split('\n')
-            for i, line in enumerate(lines):
-                # Buscar imports
-                if line.strip().startswith('import ') or line.strip().startswith('from '):
-                    parts = line.strip().replace('import ', ' ').replace('from ', ' ').split()
-                    if parts:
-                        module_name = parts[0].split('.')[0]
-                        
-                        # Verificar si es un módulo estándar
-                        if module_name in std_modules:
-                            continue
-                            
-                        # Verificar si es un módulo local
-                        if os.path.exists(os.path.join(self.backend_dir, f"{module_name}.py")):
-                            continue
-                            
-                        # Verificar si es un módulo instalado
-                        spec = importlib.util.find_spec(module_name)
-                        if spec is None:
-                            missing_imports.append({
-                                "file": py_file,
-                                "line": i + 1,
-                                "module": module_name,
-                                "import_statement": line.strip()
-                            })
-        
-        return missing_imports
-    
-    def check_syntax_errors(self) -> List[Dict[str, Any]]:
-        """Verifica errores de sintaxis en los archivos Python"""
-        syntax_errors = []
-        
-        # Listar todos los archivos Python
-        python_files = []
-        for root, _, files in os.walk(self.backend_dir):
-            for file in files:
-                if file.endswith(".py"):
-                    python_files.append(os.path.join(root, file))
-        
-        # Verificar cada archivo
-        for py_file in python_files:
-            try:
-                with open(py_file, 'r', encoding='utf-8') as f:
                     content = f.read()
                 
                 # Intentar compilar el código
