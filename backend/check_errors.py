@@ -1,43 +1,50 @@
 #!/usr/bin/env python3
 """
-Script para verificar y resolver problemas comunes en el código Python.
-Ejecutar con: python3 backend/check_errors.py
+Script para verificar imports rotos y archivos faltantes en el backend Python.
 """
-
 import os
+import ast
 import sys
-import subprocess
-import importlib.util
-from typing import List, Dict, Any, Tuple, Optional
+from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).parent
 
-class PythonCodeChecker:
-    """Clase para verificar y resolver problemas comunes en código Python"""
-    
-    def __init__(self, backend_dir: str = "./backend"):
-        """Inicializa el verificador de código"""
-        self.backend_dir = backend_dir
-        self.errors = []
-        self.warnings = []
-        
-    def check_missing_imports(self) -> List[Dict[str, Any]]:
-        """Verifica importaciones faltantes en los archivos Python"""
-        missing_imports = []
-        
-        # Listar todos los archivos Python
-        python_files = []
-        for root, _, files in os.walk(self.backend_dir):
-            for file in files:
-                if file.endswith(".py"):
-                    python_files.append(os.path.join(root, file))
-        
-        # Lista de módulos estándar de Python
-        std_modules = [
-            "os", "sys", "json", "time", "datetime", "re", "math", 
-            "random", "subprocess", "logging", "argparse", "pathlib"
-        ]
-        
-        # Verificar cada archivo
+IGNORED_DIRS = {"__pycache__", "tests", "docs", "__init__.py"}
+
+missing_imports = []
+
+for pyfile in PROJECT_ROOT.rglob("*.py"):
+    if any(part in IGNORED_DIRS for part in pyfile.parts):
+        continue
+    with open(pyfile, "r", encoding="utf-8") as f:
+        try:
+            tree = ast.parse(f.read(), filename=str(pyfile))
+        except Exception as e:
+            print(f"[ERROR] No se pudo parsear {pyfile}: {e}")
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    mod = alias.name.split(".")[0]
+                    try:
+                        __import__(mod)
+                    except ImportError:
+                        missing_imports.append((pyfile, mod))
+            elif isinstance(node, ast.ImportFrom):
+                mod = node.module.split(".")[0] if node.module else None
+                if mod:
+                    try:
+                        __import__(mod)
+                    except ImportError:
+                        missing_imports.append((pyfile, mod))
+
+if missing_imports:
+    print("\n[IMPORTS ROTOS DETECTADOS]")
+    for file, mod in missing_imports:
+        print(f"Archivo: {file} | Import faltante: {mod}")
+    sys.exit(1)
+else:
+    print("Sin imports rotos detectados. Todo OK.")
         for py_file in python_files:
             with open(py_file, 'r', encoding='utf-8') as f:
                 content = f.read()
