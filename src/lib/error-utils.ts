@@ -3,7 +3,7 @@
  */
 
 type ErrorWithOptionalStack = ErrorConstructor & {
-  captureStackTrace?: (targetObject: object, constructorOpt?: Function | undefined) => void;
+  captureStackTrace?: (targetObject: object, constructorOpt?: new (...args: unknown[]) => unknown) => void;
 };
 
 export class AppError extends Error {
@@ -20,7 +20,7 @@ export class AppError extends Error {
   }
 }
 
-export const handleAsync = <T extends any[], R>(
+export const handleAsync = <T extends unknown[], R>(
   fn: (...args: T) => Promise<R>
 ) => {
   return (...args: T): Promise<R> => {
@@ -43,15 +43,15 @@ export const safeJsonParse = <T>(
 };
 
 export const logger = {
-  info: (message: string, data?: any) => {
+  info: (message: string, data?: unknown) => {
     if (typeof window === 'undefined') {
       console.log(`[INFO] ${message}`, data || '');
     }
   },
-  error: (message: string, error?: any) => {
+  error: (message: string, error?: unknown) => {
     console.error(`[ERROR] ${message}`, error || '');
   },
-  warn: (message: string, data?: any) => {
+  warn: (message: string, data?: unknown) => {
     console.warn(`[WARN] ${message}`, data || '');
   }
 };

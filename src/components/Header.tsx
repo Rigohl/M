@@ -50,7 +50,7 @@ export function Header() {
                 <span className="sr-only">Abrir menú</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="p-0">
+            <SheetContent className="p-0 left-0">
               <div className="flex flex-col h-full">
                 <div className="flex items-center gap-2 px-4 py-4 border-b">
                   <Music className="h-6 w-6 text-primary" />

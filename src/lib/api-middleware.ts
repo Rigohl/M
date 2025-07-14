@@ -1,6 +1,6 @@
 import { AppError, logger } from './error-utils';
 
-export type ApiResponse<T = any> = {
+export type ApiResponse<T = unknown> = {
   data?: T;
   error?: string;
   statusCode: number;
@@ -33,8 +33,8 @@ export async function handleApiError(error: unknown): Promise<ApiResponse> {
 }
 
 export function validateRequest<T>(
-  data: any,
-  validator: (data: any) => data is T
+  data: unknown,
+  validator: (data: unknown) => data is T
 ): T {
   if (!validator(data)) {
     throw new AppError('Invalid request data', 400, undefined);

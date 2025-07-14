@@ -41,7 +41,7 @@ export function useAsync<T>() {
 }
 
 // Hook para validación de formularios
-export function useForm<T extends Record<string, any>>(
+export function useForm<T extends Record<string, unknown>>(
   initialValues: T,
   validator?: (values: T) => Record<keyof T, string | null>
 ) {
@@ -49,7 +49,7 @@ export function useForm<T extends Record<string, any>>(
   const [errors, setErrors] = useState<Record<keyof T, string | null>>({} as Record<keyof T, string | null>);
   const [touched, setTouched] = useState<Record<keyof T, boolean>>({} as Record<keyof T, boolean>);
 
-  const setValue = useCallback((name: keyof T, value: any) => {
+  const setValue = useCallback((name: keyof T, value: unknown) => {
     setValues(prev => ({ ...prev, [name]: value }));
     setTouched(prev => ({ ...prev, [name]: true }));
     

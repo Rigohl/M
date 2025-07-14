@@ -1,3 +1,109 @@
+# Despliegue y buenas prácticas para backend FastAPI en Supabase
+
+## Requisitos mínimos
+
+- Python 3.11 o superior
+- Archivo `requirements.txt` actualizado
+- Variables de entorno gestionadas de forma segura (no hardcodear claves)
+- Logging estructurado
+- Endpoint `/health` para monitoreo
+
+## Ejecución local
+
+```bash
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+## Ejemplo de Dockerfile (opcional, recomendado para Supabase)
+
+```Dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+## Variables de entorno recomendadas
+
+- `JWT_SECRET`
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+- `SUNO_API_KEY`
+
+Configúralas en el dashboard de Supabase o usando un archivo `.env` (no lo subas al repo).
+
+## Logging y monitoreo
+
+El backend ya implementa logging estructurado. Puedes conectar servicios externos (Sentry, Datadog, etc.) si lo deseas.
+
+## Endpoint de health check
+
+El endpoint `/health` responde con `{"status": "ok"}` para monitoreo y readiness.
+
+## Recomendaciones extra
+
+- Mantén tus dependencias actualizadas.
+- Usa HTTPS en producción.
+- No expongas claves ni secretos en el código.
+- Usa pruebas automáticas (`pytest`).
+
+---
+Para dudas sobre despliegue en Supabase, consulta la [documentación oficial](https://supabase.com/docs/guides/functions).
+# Despliegue y buenas prácticas para backend FastAPI en Supabase
+
+## Requisitos mínimos
+
+- Python 3.11 o superior
+- Archivo `requirements.txt` actualizado
+- Variables de entorno gestionadas de forma segura (no hardcodear claves)
+- Logging estructurado
+- Endpoint `/health` para monitoreo
+
+## Ejecución local
+
+```bash
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+## Ejemplo de Dockerfile (opcional, recomendado para Supabase)
+
+```Dockerfile
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+## Variables de entorno recomendadas
+
+- `JWT_SECRET`
+- `SUPABASE_URL`
+- `SUPABASE_KEY`
+- `SUNO_API_KEY`
+
+Configúralas en el dashboard de Supabase o usando un archivo `.env` (no lo subas al repo).
+
+## Logging y monitoreo
+
+El backend ya implementa logging estructurado. Puedes conectar servicios externos (Sentry, Datadog, etc.) si lo deseas.
+
+## Endpoint de health check
+
+El endpoint `/health` responde con `{"status": "ok"}` para monitoreo y readiness.
+
+## Recomendaciones extra
+
+- Mantén tus dependencias actualizadas.
+- Usa HTTPS en producción.
+- No expongas claves ni secretos en el código.
+- Usa pruebas automáticas (`pytest`).
+
+---
+Para dudas sobre despliegue en Supabase, consulta la [documentación oficial](https://supabase.com/docs/guides/functions).
 ## Backend Moderno Optimizado
 
 Este backend está construido con Python y FastAPI, siguiendo buenas prácticas modernas:

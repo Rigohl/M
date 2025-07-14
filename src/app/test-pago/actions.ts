@@ -4,7 +4,7 @@ export type SongCreationFormValues = {
   title: string;
   artist: string;
   genre?: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | undefined;
 };
 
 /**
