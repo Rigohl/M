@@ -1,29 +1,19 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "python3 backend/pre_build.py && npm install --legacy-peer-deps && npm run build",
-  "outputDirectory": ".next",
-  "installCommand": "pip install -r backend/requirements.txt && npm ci",
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/backend/api.py"
+      "src": "next.config.js",
+      "use": "@vercel/next"
+    },
+    {
+      "src": "backend/api/**/*.py",
+      "use": "@vercel/python"
     }
   ],
-  "functions": {
-    "backend/*.py": {
-      "runtime": "python3.9"
-    },
-    "api/index.php": {
-      "runtime": "now-php@1.0.0"
-    },
-    "api/**/*.py": {
-      "runtime": "python@3.11"
-    }
-  },
-  "crons": [
+  "rewrites": [
     {
-      "path": "/api/maintenance",
-      "schedule": "0 0 * * *"
+      "source": "/api/(.*)",
+      "destination": "/backend/api/$1"
     }
   ]
 }
