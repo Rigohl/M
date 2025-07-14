@@ -32,16 +32,27 @@ app.include_router(ai_router, prefix="/ai")
 ai_client = AIIntegration(api_key="YOUR_API_KEY")
 
 # Modelos de datos
+
 class SongCreationFormValues(BaseModel):
     title: str
     description: str
     genre: str
 
+    @classmethod
+    def validate_data(cls, data):
+        return cls(**data)
+
+
 class UserCredentials(BaseModel):
     email: str
     password: str
 
+    @classmethod
+    def validate_data(cls, data):
+        return cls(**data)
+
 # Modelo de ejemplo para validación
+
 class SongRequest(BaseModel):
     title: str
     artist: str
@@ -60,9 +71,16 @@ async def add_error_handling(request: Request, call_next):
         return JSONResponse(status_code=500, content={"detail": "Internal Server Error"})
 
 # Endpoints
-@app.post("/create-song")
+
+@app.post("/create-song", response_model=dict)
 async def create_song(form_data: SongCreationFormValues):
+    """
+    Crea una canción usando IA a partir de los datos del formulario.
+    - Valida y sanitiza los datos recibidos.
+    - Devuelve letra y audio generado (simulado).
+    """
     try:
+        validated = SongCreationFormValues.validate_data(form_data.dict())
         # Simulación de generación de canción con IA
         await asyncio.sleep(3)
         return {
@@ -70,36 +88,75 @@ async def create_song(form_data: SongCreationFormValues):
             "lyrics": "Esta es una letra generada por IA para tu canción.",
             "audio": "/audio/placeholder.mp3"
         }
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=ve.errors())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/register-user")
+
+@app.post("/register-user", response_model=dict)
 async def register_user(credentials: UserCredentials):
+    """
+    Registra un usuario en Supabase.
+    - Valida y sanitiza los datos recibidos.
+    - Maneja errores y devuelve el usuario creado.
+    """
     try:
-        response = supabase.auth.sign_up({"email": credentials.email, "password": credentials.password})
+        validated = UserCredentials.validate_data(credentials.dict())
+        response = supabase.auth.sign_up({"email": validated.email, "password": validated.password})
         if response.get("error"):
             raise HTTPException(status_code=400, detail=response["error"]["message"])
         return {"success": True, "user": response["user"]}
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=ve.errors())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/login-user")
+
+@app.post("/login-user", response_model=dict)
 async def login_user(credentials: UserCredentials):
+    """
+    Inicia sesión de usuario en Supabase.
+    - Valida y sanitiza los datos recibidos.
+    - Maneja errores y devuelve el usuario autenticado.
+    """
     try:
-        response = supabase.auth.sign_in_with_password({"email": credentials.email, "password": credentials.password})
+        validated = UserCredentials.validate_data(credentials.dict())
+        response = supabase.auth.sign_in_with_password({"email": validated.email, "password": validated.password})
         if response.get("error"):
             raise HTTPException(status_code=400, detail=response["error"]["message"])
         return {"success": True, "user": response["user"]}
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=ve.errors())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/save-song-data")
-async def save_song_data(song_id: str, song_data: dict):
+
+from pydantic import Field
+
+class SongData(BaseModel):
+    id: str = Field(..., min_length=1)
+    title: str
+    artist: str
+    genre: str
+    lyrics: str = ""
+    audio_url: str = ""
+
+@app.post("/save-song-data", response_model=dict)
+async def save_song_data(song: SongData):
+    """
+    Guarda los datos de una canción en Supabase.
+    - Valida y sanitiza los datos recibidos.
+    - Maneja errores y devuelve confirmación.
+    """
     try:
-        response = supabase.table("songs").upsert({"id": song_id, **song_data}).execute()
+        validated = song.dict()
+        response = supabase.table("songs").upsert(validated).execute()
         if response.get("error"):
             raise HTTPException(status_code=400, detail=response["error"]["message"])
         return {"success": True}
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=ve.errors())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

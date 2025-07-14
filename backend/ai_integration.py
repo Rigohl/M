@@ -1,13 +1,12 @@
 from typing import Any, Dict
-from openai import OpenAI
+import openai
 
 import os
 import requests
 
 class AIIntegration:
     def __init__(self, api_key: str):
-        self.client = OpenAI(api_key)
-
+        openai.api_key = api_key
         # Integración Suno
         self.suno_api_key = os.getenv("SUNO_API_KEY", "YOUR_SUNO_API_KEY")
         self.suno_base_url = os.getenv("SUNO_API_URL", "https://api.suno.ai/v1")
@@ -44,24 +43,36 @@ class AIIntegration:
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def generate_text(self, prompt: str, max_tokens: int = 100) -> Dict[str, Any]:
+    def generate_text(self, prompt: str, max_tokens: int = 100):
         try:
-            response = self.client.Completion.create(
-                engine="text-davinci-003",
-                prompt=prompt,
+            response = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role": "user", "content": prompt}],
                 max_tokens=max_tokens
             )
-            return {"success": True, "data": response.choices[0].text.strip()}
+            content = None
+            if response.choices and response.choices[0].message and response.choices[0].message.content:
+                content = response.choices[0].message.content
+            if content:
+                return {"success": True, "data": content.strip()}
+            else:
+                return {"success": False, "error": "Respuesta vacía de OpenAI"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
-    def generate_image(self, description: str) -> Dict[str, Any]:
+    def generate_image(self, description: str):
         try:
-            response = self.client.Image.create(
+            response = openai.images.generate(
                 prompt=description,
                 n=1,
                 size="1024x1024"
             )
-            return {"success": True, "data": response.data[0].url}
+            url = None
+            if hasattr(response, 'data') and response.data and hasattr(response.data[0], 'url'):
+                url = response.data[0].url
+            if url:
+                return {"success": True, "data": url}
+            else:
+                return {"success": False, "error": "No se pudo obtener la URL de la imagen generada"}
         except Exception as e:
             return {"success": False, "error": str(e)}
