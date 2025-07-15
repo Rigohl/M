@@ -1,6 +1,7 @@
 // src/components/InspirationSection.tsx
 import Link from 'next/link';
 import React from 'react';
+import Image from 'next/image'; // Import the Image component
 
 export default function InspirationSection() {
   return (

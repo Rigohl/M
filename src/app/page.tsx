@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import FloatingMenu from '@/components/FloatingMenu';
-import InspirationSection from '@/components/InspirationSection';
-import ExamplesSection from '@/components/ExamplesSection';
-import TestimonialsSection from '@/components/TestimonialsSection';
-import PackagesSection from '@/components/PackagesSection';
+import FloatingMenu from "/home/runner/work/M/M/src/components/FloatingMenu";
+import InspirationSection from "/home/runner/work/M/M/src/components/InspirationSection";
+import ExamplesSection from "/home/runner/work/M/M/src/components/ExamplesSection";
+import TestimonialsSection from "/home/runner/work/M/M/src/components/TestimonialsSection";
+import PackagesSection from "/home/runner/work/M/M/src/components/PackagesSection";
 
 export default function Home() {
-  return ( // Main container div wrapping all content
+  return (
     <main className="flex flex-col min-h-screen items-center justify-center bg-gradient-to-br from-[#191919] via-[#111827] to-[#1e293b] px-4 py-10">
       {/* HERO */}
       <section className="w-full max-w-2xl text-center bg-black/60 rounded-3xl shadow-2xl p-10 mb-10 border border-[#323232]">
@@ -35,21 +34,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Use imported components for sections */}
-      <InspirationSection />
-      <ExamplesSection />
-      <TestimonialsSection />
-      <PackagesSection />
+      {/* Use imported components for sections, using section tags for IDs */}
+      <section id="inspiracion">
+        <InspirationSection />
+      </section>
+      <section id="ejemplos">
+        <ExamplesSection />
+      </section>
+      <section id="opiniones">
+        <TestimonialsSection />
+      </section>
+      <section id="paquetes">
+        <PackagesSection />
+      </section>
 
       {/* Song Creation Form Section */}
       {/* Assuming SongCreationForm needs to be here based on the blueprint */}
-      <section id="formulario-cancion" className="my-8">
-        {/* <SongCreationForm />  Uncomment and import if needed */}
-      </section>
-      {/* FOOTER */}
-      <footer className="text-center text-gray-400 text-xs py-6">
-        Powered by <span className="text-[#65d46e] font-bold">Atlas Web Pro Max</span> • Next.js • ShadCN • IA • 2024
-      </footer>
+      <section id="formulario-cancion" className="my-8"></section>
     </main>
   );
 }
